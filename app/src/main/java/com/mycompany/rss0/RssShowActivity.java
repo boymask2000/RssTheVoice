@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,7 +19,6 @@ import java.util.List;
 
 public class RssShowActivity extends Activity {
 
-
     private final List<DataList> list = new ArrayList<DataList>();
     private ListView listview = null;
     private StableArrayAdapter adapter = null;
@@ -30,28 +27,19 @@ public class RssShowActivity extends Activity {
 
     private String url;
 
+    private boolean paused = false;
+    private int delay = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle b = getIntent().getExtras();
-        if(b!=null)
-        url = b.getString("url");
-url = "http://www.repubblica.it/rss/homepage/rss2.0.xml";
+        if (b != null) {
+            url = b.getString("url");
+        }
+      //  url = "http://www.repubblica.it/rss/homepage/rss2.0.xml";
 
-
-        handler.postDelayed(new Job(), 100);
-
-   /*     RssParser parser = new RssParser(url);
-        parser.setListener(new RssEventListener() {
-            @Override
-            public void newsFound(DataList data) {
-                setItem( data);
-            }
-        });
-        parser.start();*/
-
-        //       DBHelper.checkAndImportDB(this);
 
         setContentView(R.layout.rsshowactivity);
         listview = (ListView) findViewById(R.id.listview);
@@ -64,26 +52,41 @@ url = "http://www.repubblica.it/rss/homepage/rss2.0.xml";
         setAction();
 
 
+        handler.postDelayed(new Job(), 100);
     }
-    public class Job extends Thread{
-        public void run(){
-message.setText((new Date()).toString());
+
+    public class Job extends Thread {
+        public void run() {
+            message.setText((new Date()).toString());
             RssParser parser = new RssParser(url);
             parser.setListener(new RssEventListener() {
                 @Override
                 public void newsFound(DataList data) {
-                    setItem( data);
+                    setItem(data);
                 }
 
                 @Override
                 public void starting() {
-                    list.clear();
                 }
             });
             parser.start();
 
-            handler.postDelayed(this, 10000);
+            if (!paused)
+                handler.postDelayed(this, delay);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        paused = true;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        paused = false;
+        handler.postDelayed(new Job(), delay);
+        super.onResume();
     }
 
     private void setAction() {
@@ -112,7 +115,7 @@ message.setText((new Date()).toString());
     }
 
     private void setItem(DataList data) {
-
+        if (data.getCounter() == 1) list.clear();
         int size = list.size();
         data.setId(size + 1);
         list.add(data);

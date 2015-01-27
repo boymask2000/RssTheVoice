@@ -1,6 +1,5 @@
 package com.mycompany.rss0;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import org.w3c.dom.Document;
@@ -43,9 +42,11 @@ public class RssParser {
     }
 
     private class HttpParser extends AsyncTask<URL, DataList, Integer> {
+        private int counter = 0;
+
         protected Integer doInBackground(URL... urls) {
 
-            if( listener!=null)listener.starting();
+            if (listener != null) listener.starting();
             doIt(urls[0], 0);
 
             return 0;
@@ -86,8 +87,6 @@ public class RssParser {
 
         private void parseNode(Node node, int lev) {
 
-            System.out.println(node.getNodeName() + " " + node.getTextContent());
-
             NodeList ch = node.getChildNodes();
             for (int i = 0; i < ch.getLength(); i++) {
                 Node n = ch.item(i);
@@ -109,6 +108,7 @@ public class RssParser {
             String link = searchNode(node, "link");
             if (title != null && link != null) {
                 DataList data = new DataList();
+                data.setCounter(++counter);
                 data.setTitle(title);
                 data.setLink(link);
 

@@ -5,7 +5,16 @@ package com.mycompany.rss0;
  */
 
 public class DataList {
-    private long id =0;
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    private int counter;
+    private long id = 0;
     private String link;
     private String title;
 
@@ -16,9 +25,11 @@ public class DataList {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String toString(){
+
+    public String toString() {
         return title;
     }
+
     public long getId() {
         return id;
     }
