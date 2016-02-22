@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mycompany.rss0.db.DBHelper;
-import com.mycompany.rss0.db.RssData;
 
-
-public class NewRssActivity extends Activity implements View.OnClickListener {
+public class NewHotWordActivity extends Activity implements View.OnClickListener {
 
     private TextView nome;
     private TextView link;
@@ -18,7 +16,7 @@ public class NewRssActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_new_rss);
+        setContentView(R.layout.activity_new_hot_word);
         nome = (TextView) findViewById(R.id.nome);
         link = (TextView) findViewById(R.id.link);
 
@@ -40,13 +38,12 @@ public class NewRssActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ok_button:
-                RssData data = new RssData();
+
                 String n = nome.getText().toString();
-                String l = link.getText().toString();
-                if (l.trim().length() > 0) {
-                    data.setName(n);
-                    data.setLink(l);
-                    DBHelper.insertRSS(this, data);
+
+                if (n.trim().length() > 0) {
+
+                    DBHelper.insertHotWord(this, n);
                 }
                 finish();
                 break;

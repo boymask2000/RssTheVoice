@@ -38,7 +38,7 @@ public class RssShowActivity extends Activity {
         if (b != null) {
             url = b.getString("url");
         }
-      //  url = "http://www.repubblica.it/rss/homepage/rss2.0.xml";
+        //  url = "http://www.repubblica.it/rss/homepage/rss2.0.xml";
 
 
         setContentView(R.layout.rsshowactivity);

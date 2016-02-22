@@ -3,14 +3,6 @@ package com.mycompany.rss0.db;
 /**
  * Created by gposabella on 1/27/15.
  */
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,6 +11,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static String TABLE_RSS = "rss";
@@ -167,6 +168,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public static long insertHotWord(Context context, String word) {
+        SQLiteDatabase db = getHelper(context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("word", word);
+
+        long id = db.insert(TABLE_HOTWORD, null, values);
+
+        return id;
+    }
+
+    public static long deleteHotWord(Context context, String word) {
+        SQLiteDatabase db = getHelper(context).getWritableDatabase();
+
+        String whereClause = "word = ?";
+        String[] whereArgs = {word};
+
+
+        long id = db.delete(TABLE_HOTWORD, whereClause, whereArgs);
+
+        return id;
+    }
+
     public static long insertRSS(Context context, RssData dish) {
         SQLiteDatabase db = getHelper(context).getWritableDatabase();
 
@@ -180,11 +203,25 @@ public class DBHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public static long deleteRSS(Context context, RssData dish) {
+        SQLiteDatabase db = getHelper(context).getWritableDatabase();
+
+
+        String whereClause = "link = ?";
+        String[] whereArgs = {dish.getLink()};
+
+
+        long id = db.delete(TABLE_RSS, whereClause, whereArgs);
+
+
+        return id;
+    }
+
     public static List<RssData> getRss(Context context, RssData dish) {
         List<RssData> result = new ArrayList<RssData>();
 
         SQLiteDatabase db = getHelper(context).getWritableDatabase();
-        String values[] = { dish.getName() };
+        String values[] = {dish.getName()};
         String whereClause = "";
 
         Cursor cursor = db.query(TABLE_RSS, null, "nome =   ?", values, null,
@@ -224,6 +261,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return result;
     }
+
     public static List<String> getAllHotWord(Context context) {
         List<String> result = new ArrayList<String>();
 

@@ -2,6 +2,8 @@ package com.mycompany.rss0;
 
 import android.os.AsyncTask;
 
+import com.mycompany.rss0.com.mycompany.rss0.publish.PrintPublisher;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -10,6 +12,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,6 +23,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 public class RssParser {
     private URL url;
+
 
 
     private RssEventListener listener = null;
@@ -31,6 +36,7 @@ public class RssParser {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
     }
 
     public void start() {
